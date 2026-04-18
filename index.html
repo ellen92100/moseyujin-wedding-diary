@@ -409,6 +409,16 @@
      ================================================ */
   .section.reverse .panel-text{order:2}
   .section.reverse .panel-img{order:1}
+  /* give the text side more room so bullet lines don't wrap */
+  .section.reverse{grid-template-columns: 0.78fr 1.22fr;}
+  .section.reverse .panel-text{padding:120px 90px 110px 60px;}
+  .section.reverse .panel-text .lead{max-width:none;}
+  .section.reverse .panel-text .list{max-width:none;}
+  .section.reverse .panel-text .list li{
+    grid-template-columns:36px 1fr;
+    gap:18px;
+    white-space:nowrap;
+  }
 
   /* ================================================
      SLIDE 5 — FINALE
