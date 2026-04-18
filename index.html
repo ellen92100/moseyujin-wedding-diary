@@ -545,6 +545,10 @@
     white-space:nowrap;
     font-size:clamp(13px, .92vw, 15px);
   }
+  /* slide 2 (Chapter I) — widen the video panel */
+  .slide[data-idx="1"].section{grid-template-columns: 0.82fr 1.18fr;}
+  .slide[data-idx="1"].section .panel-text{padding:120px 60px 110px 90px;}
+
   /* slide 4 (Chapter III) — give bullets maximum room for long item 03 */
   .slide[data-idx="3"].section{grid-template-columns: 1.55fr 0.45fr;}
   .slide[data-idx="3"].section .panel-text{padding:120px 40px 110px 80px;}
