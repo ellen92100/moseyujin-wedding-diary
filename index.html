@@ -534,6 +534,17 @@
     gap:18px;
     white-space:nowrap;
   }
+  /* mirror for non-reverse section slides (ch. I, III) */
+  .section:not(.reverse){grid-template-columns: 1.3fr 0.7fr;}
+  .section:not(.reverse) .panel-text{padding:120px 60px 110px 90px;}
+  .section:not(.reverse) .panel-text .lead{max-width:none;}
+  .section:not(.reverse) .panel-text .list{max-width:none;}
+  .section:not(.reverse) .panel-text .list li{
+    grid-template-columns:36px 1fr;
+    gap:18px;
+    white-space:nowrap;
+    font-size:clamp(13px, .92vw, 15px);
+  }
 
   /* ================================================
      SLIDE 5 — FINALE
