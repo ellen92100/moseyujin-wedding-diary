@@ -576,7 +576,8 @@
       <div class="video-badge"><span class="dot-live"></span><span>Highlight Film</span></div>
       <video id="weddingVideo" src="highlight.mp4" muted playsinline preload="metadata" loop></video>
       <div class="video-caption">김모세 &amp; 오유진<em>The most radiant day</em></div>
-      <button class="video-control" id="videoToggle" aria-label="play/pause">▶</button>
+      <button class="video-control video-mute" id="videoMute" aria-label="sound" style="right:112px;">🔇</button>
+      <button class="video-control" id="videoToggle" aria-label="play/pause">❚❚</button>
     </div>
   </section>
 
@@ -708,6 +709,14 @@
     e.stopPropagation();
     if(video.paused){ video.play(); video.playbackRate = PLAYBACK_RATE; vToggle.textContent='❚❚'; }
     else            { video.pause(); vToggle.textContent='▶'; }
+  });
+
+  const vMute = document.getElementById('videoMute');
+  vMute?.addEventListener('click', e=>{
+    e.stopPropagation();
+    video.muted = !video.muted;
+    vMute.textContent = video.muted ? '🔇' : '🔊';
+    if(!video.muted && video.paused){ video.play(); vToggle.textContent='❚❚'; }
   });
 
   function go(n){
