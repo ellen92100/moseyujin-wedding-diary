@@ -285,6 +285,98 @@
   .slide.active .grid-panel .cell:nth-child(11){transition-delay:.95s}
   .slide.active .grid-panel .cell:nth-child(12){transition-delay:1.02s}
 
+  /* story panel — auto-rotating slideshow (Chapter III) */
+  .section .panel-img.story-panel{padding:0;background:#0a0908;}
+  .section .panel-img.story-panel::before{
+    content:"";position:absolute;inset:40px;
+    border:1px solid rgba(243,239,233,.22);
+    z-index:3;pointer-events:none;
+  }
+  .section .panel-img.story-panel .stage-wrap{
+    position:absolute;inset:40px;
+    overflow:hidden;
+    z-index:1;
+  }
+  .section .panel-img.story-panel .story-item{
+    position:absolute;inset:0;
+    opacity:0;
+    animation: storyCycle 15s infinite;
+  }
+  .section .panel-img.story-panel .story-item img{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+    filter: saturate(1.08) contrast(1.05);
+  }
+  .section .panel-img.story-panel .story-item:nth-child(1){animation-delay:0s;}
+  .section .panel-img.story-panel .story-item:nth-child(2){animation-delay:5s;}
+  .section .panel-img.story-panel .story-item:nth-child(3){animation-delay:10s;}
+  @keyframes storyCycle{
+    0%   { opacity:0; transform:scale(1.02); }
+    3%   { opacity:1; }
+    33%  { opacity:1; transform:scale(1.12); }
+    36%  { opacity:0; transform:scale(1.12); }
+    100% { opacity:0; }
+  }
+  /* gradient for caption legibility */
+  .section .panel-img.story-panel .stage-wrap::after{
+    content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:linear-gradient(180deg, transparent 55%, rgba(10,9,8,.75));
+  }
+  /* caption */
+  .section .panel-img.story-panel .caption{
+    position:absolute;
+    left:64px;bottom:64px;
+    z-index:4;
+    font-family:'Italiana',serif;
+    color:var(--ivory);
+    letter-spacing:.18em;
+    font-size:clamp(14px,1vw,18px);
+  }
+  .section .panel-img.story-panel .caption .cap{
+    display:block;
+    opacity:0;
+    animation: capCycle 15s infinite;
+  }
+  .section .panel-img.story-panel .caption .cap em{
+    display:block;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-weight:300;
+    font-size:.72em;
+    color:#d4b27a;
+    letter-spacing:.12em;
+    margin-top:6px;
+  }
+  .section .panel-img.story-panel .caption .cap:nth-child(1){animation-delay:0s;}
+  .section .panel-img.story-panel .caption .cap:nth-child(2){animation-delay:5s;}
+  .section .panel-img.story-panel .caption .cap:nth-child(3){animation-delay:10s;}
+  @keyframes capCycle{
+    0%   { opacity:0; transform:translateY(10px); }
+    5%   { opacity:1; transform:translateY(0); }
+    30%  { opacity:1; }
+    35%  { opacity:0; }
+    100% { opacity:0; }
+  }
+  /* indicator dots */
+  .section .panel-img.story-panel .dots-mini{
+    position:absolute;
+    right:64px;bottom:70px;
+    z-index:4;
+    display:flex;gap:8px;
+  }
+  .section .panel-img.story-panel .dots-mini span{
+    width:22px;height:2px;background:rgba(243,239,233,.3);
+    transition:background .3s ease;
+    animation: dotCycle 15s infinite;
+  }
+  .section .panel-img.story-panel .dots-mini span:nth-child(1){animation-delay:0s;}
+  .section .panel-img.story-panel .dots-mini span:nth-child(2){animation-delay:5s;}
+  .section .panel-img.story-panel .dots-mini span:nth-child(3){animation-delay:10s;}
+  @keyframes dotCycle{
+    0%,33%   { background:rgba(243,239,233,.95); }
+    34%,100% { background:rgba(243,239,233,.3); }
+  }
+
   .section .panel-img.video-panel{background:#0a0908;padding:0}
   .section .panel-img.video-panel::before{
     content:"";position:absolute;inset:40px;
@@ -667,7 +759,19 @@
         <li><span class="n">04</span><span>양가 경조사를 내 일처럼 챙기며 진짜 가족이 되어갑니다</span></li>
       </ul>
     </div>
-    <div class="panel-img"><img src="couple.png" alt="couple" /></div>
+    <div class="panel-img story-panel">
+      <div class="stage-wrap">
+        <div class="story-item"><img src="photos/story1.jpg" alt="" loading="lazy"/></div>
+        <div class="story-item"><img src="photos/story2.jpg" alt="" loading="lazy"/></div>
+        <div class="story-item"><img src="photos/story3.jpg" alt="" loading="lazy"/></div>
+      </div>
+      <div class="caption">
+        <span class="cap">City Pradium Dihamony<em>의왕청계역 시티프라디움 디하모니</em></span>
+        <span class="cap">Green Neighborhood<em>청계산 자락, 우리의 새 동네</em></span>
+        <span class="cap">Connected Location<em>청계역 · 평촌 · 과천 연결</em></span>
+      </div>
+      <div class="dots-mini"><span></span><span></span><span></span></div>
+    </div>
   </section>
 
   <!-- ========== 5. 잘 살겠습니다 ========== -->
