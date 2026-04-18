@@ -545,6 +545,22 @@
     white-space:nowrap;
     font-size:clamp(13px, .92vw, 15px);
   }
+  /* slide 4 (Chapter III) — give bullets maximum room for long item 03 */
+  .slide[data-idx="3"].section{grid-template-columns: 1.55fr 0.45fr;}
+  .slide[data-idx="3"].section .panel-text{padding:120px 40px 110px 80px;}
+  .slide[data-idx="3"].section .panel-text .list li{
+    grid-template-columns:30px 1fr;
+    gap:14px;
+    font-size:clamp(11.5px, .82vw, 14px);
+    letter-spacing:0;
+    padding:16px 0;
+  }
+  .slide[data-idx="3"].section .panel-text .list li .n{
+    font-size:15px;
+  }
+  .slide[data-idx="3"].section .panel-text .list li em{
+    letter-spacing:0;
+  }
 
   /* ================================================
      SLIDE 5 — FINALE
