@@ -1,0 +1,19 @@
+# Claude Code local state
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Temporary
+*.tmp
+*.log
+
+# Original uncompressed video (100MB — exceeds GitHub limit)
+highlight_original.mp4

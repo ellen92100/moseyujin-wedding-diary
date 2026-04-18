@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>모세유진의 결혼일기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Italiana&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#f3efe9;
+    --paper:#eae4da;
+    --ink:#1f1d1a;
+    --ink-soft:#4a463f;
+    --line:#b8ad9b;
+    --accent:#7d6a4f;     /* olive-bronze */
+    --accent-2:#a38f6a;
+    --mute:#8a8478;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{
+    width:100%;height:100%;
+    background:var(--ink);
+    overflow:hidden;
+    color:var(--ink);
+    font-family:'Noto Serif KR','Nanum Myeongjo',serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ===== Stage ===== */
+  .stage{position:relative;width:100vw;height:100vh;overflow:hidden;background:var(--ivory);}
+  .slide{
+    position:absolute;inset:0;
+    opacity:0;
+    transform:translateY(12px);
+    transition:opacity 1.1s cubic-bezier(.4,0,.2,1), transform 1.4s cubic-bezier(.4,0,.2,1);
+    pointer-events:none;
+    display:grid;
+    background:var(--ivory);
+  }
+  .slide.active{opacity:1;transform:translateY(0);pointer-events:auto;z-index:2;}
+
+  /* grain overlay */
+  .stage::after{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:5;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode:multiply;opacity:.55;
+  }
+
+  /* ===== Shared chrome ===== */
+  .chrome-top, .chrome-bottom{
+    position:fixed;left:0;right:0;z-index:40;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:26px 44px;
+    font-family:'Inter',sans-serif;
+    font-size:11px;font-weight:400;
+    letter-spacing:.4em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .chrome-top{top:0}
+  .chrome-bottom{bottom:0}
+  .chrome-top .brand,.chrome-top .meta,
+  .chrome-bottom .l,.chrome-bottom .r{display:flex;gap:14px;align-items:center}
+  .divider{width:24px;height:1px;background:var(--line);opacity:.7}
+
+  /* ===== Navigation ===== */
+  .nav{
+    position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+    z-index:50;display:flex;align-items:center;gap:26px;
+    font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.35em;
+    color:var(--ink-soft);
+  }
+  .nav button{
+    width:40px;height:40px;border-radius:50%;
+    background:transparent;border:1px solid var(--line);
+    color:var(--ink-soft);font-size:14px;cursor:pointer;
+    transition:all .3s ease;font-family:inherit;
+  }
+  .nav button:hover{background:var(--ink);color:var(--ivory);border-color:var(--ink);}
+  .dots{display:flex;gap:8px}
+  .dot{width:22px;height:1px;background:var(--line);opacity:.5;cursor:pointer;transition:all .4s ease}
+  .dot.active{background:var(--ink);opacity:1;width:44px}
+
+  /* ===== Page number ===== */
+  .page-num{
+    position:absolute;
+    font-family:'Italiana',serif;
+    font-size:clamp(120px,22vw,340px);
+    line-height:.8;
+    color:var(--paper);
+    letter-spacing:-.04em;
+    user-select:none;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* ================================================
+     SLIDE 1  —  COVER
+     ================================================ */
+  .cover{grid-template-columns:1fr 1fr;}
+  .cover .left{
+    position:relative;
+    display:flex;flex-direction:column;justify-content:space-between;
+    padding:120px 72px 100px;
+    border-right:1px solid var(--line);
+  }
+  .cover .eyebrow{
+    font-family:'Inter',sans-serif;font-size:11px;
+    letter-spacing:.5em;text-transform:uppercase;
+    color:var(--accent);
+    display:flex;align-items:center;gap:14px;
+  }
+  .cover .eyebrow::before{content:"";width:40px;height:1px;background:var(--accent)}
+  .cover h1{
+    font-family:'Italiana',serif;
+    font-size:clamp(56px,7.4vw,120px);
+    line-height:.95;
+    font-weight:400;
+    color:var(--ink);
+    letter-spacing:-.01em;
+    margin-top:auto;
+  }
+  .cover h1 em{
+    display:block;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-weight:300;
+    font-size:.52em;
+    color:var(--accent);
+    margin-top:14px;
+    letter-spacing:.02em;
+  }
+  .cover .ko-title{
+    font-family:'Nanum Myeongjo',serif;
+    font-weight:800;
+    font-size:clamp(22px,2vw,30px);
+    letter-spacing:.5em;
+    color:var(--ink-soft);
+    margin-top:28px;
+    padding-top:28px;
+    border-top:1px solid var(--line);
+  }
+  .cover .foot{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:'Inter',sans-serif;font-size:11px;
+    letter-spacing:.4em;text-transform:uppercase;
+    color:var(--mute);
+  }
+  .cover .foot .big{
+    font-family:'Italiana',serif;
+    font-size:20px;letter-spacing:.3em;
+    color:var(--ink);
+  }
+  .cover .right{
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    padding:80px;
+    background:var(--paper);
+    overflow:hidden;
+  }
+  .cover .right::before{
+    content:"";position:absolute;inset:40px;
+    border:1px solid rgba(31,29,26,.18);
+  }
+  .cover .right .num{
+    position:absolute;right:-20px;bottom:-80px;
+    font-family:'Italiana',serif;
+    font-size:clamp(220px,36vw,520px);
+    color:rgba(31,29,26,.05);
+    line-height:.8;
+    pointer-events:none;
+  }
+  .cover .right img{
+    position:relative;
+    height:78%;max-height:78%;
+    object-fit:contain;
+    filter:grayscale(.18) contrast(1.02);
+    z-index:1;
+  }
+
+  /* ================================================
+     SHARED — Section slides
+     ================================================ */
+  .section{grid-template-columns:1fr 1fr;height:100%;}
+  .section .panel-text{
+    position:relative;
+    padding:120px 80px 110px;
+    display:flex;flex-direction:column;justify-content:center;gap:36px;
+    z-index:1;
+  }
+  .section .panel-img{
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--paper);
+    overflow:hidden;
+  }
+  .section .panel-img::before{
+    content:"";position:absolute;inset:40px;
+    border:1px solid rgba(31,29,26,.16);
+  }
+  .section .panel-img img{
+    position:relative;
+    height:72%;max-height:72%;object-fit:contain;
+    filter:grayscale(.18) contrast(1.02);
+    z-index:1;
+    transition:transform 1.6s ease;
+  }
+  .slide.active .panel-img img{transform:translateY(-4px)}
+
+  /* video panel */
+  .section .panel-img.video-panel{background:#0a0908;padding:0}
+  .section .panel-img.video-panel::before{
+    content:"";position:absolute;inset:40px;
+    border:1px solid rgba(243,239,233,.22);
+    z-index:2;pointer-events:none;
+  }
+  .section .panel-img.video-panel video{
+    position:absolute;inset:40px;
+    width:calc(100% - 80px);
+    height:calc(100% - 80px);
+    object-fit:cover;
+    z-index:1;
+    filter:contrast(1.04) saturate(.95);
+  }
+  .video-badge{
+    position:absolute;
+    top:58px;left:58px;
+    z-index:3;
+    display:flex;align-items:center;gap:10px;
+    font-family:'Inter',sans-serif;
+    font-size:10px;letter-spacing:.4em;
+    text-transform:uppercase;
+    color:var(--ivory);
+    opacity:.85;
+  }
+  .video-badge .dot-live{
+    width:6px;height:6px;border-radius:50%;
+    background:#d4b27a;
+    box-shadow:0 0 0 4px rgba(212,178,122,.25);
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.5;transform:scale(.85)}
+  }
+  .video-caption{
+    position:absolute;
+    left:58px;bottom:58px;
+    z-index:3;
+    font-family:'Italiana',serif;
+    color:var(--ivory);
+    letter-spacing:.18em;
+    font-size:clamp(14px,1vw,18px);
+    opacity:.9;
+  }
+  .video-caption em{
+    display:block;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-weight:300;
+    font-size:.75em;
+    color:#d4b27a;
+    letter-spacing:.1em;
+    margin-top:6px;
+  }
+  .video-control{
+    position:absolute;
+    right:58px;bottom:58px;
+    z-index:3;
+    width:46px;height:46px;border-radius:50%;
+    background:rgba(10,9,8,.4);
+    border:1px solid rgba(243,239,233,.5);
+    color:var(--ivory);
+    font-size:14px;cursor:pointer;
+    backdrop-filter:blur(6px);
+    transition:all .25s ease;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .video-control:hover{background:var(--ivory);color:var(--ink);border-color:var(--ivory)}
+
+  /* text bits */
+  .eyebrow-row{
+    display:flex;align-items:center;gap:16px;
+    font-family:'Inter',sans-serif;font-size:11px;
+    letter-spacing:.5em;text-transform:uppercase;
+    color:var(--accent);
+  }
+  .eyebrow-row .rule{width:36px;height:1px;background:var(--accent)}
+  .eyebrow-row .chapter-n{
+    font-family:'Italiana',serif;
+    font-size:24px;letter-spacing:0;
+    color:var(--ink);
+  }
+
+  h2.section-title{
+    font-family:'Italiana',serif;
+    font-size:clamp(48px,5.4vw,84px);
+    line-height:1;
+    font-weight:400;
+    color:var(--ink);
+    letter-spacing:-.01em;
+  }
+  h2.section-title em{
+    display:block;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-weight:300;
+    font-size:.34em;
+    color:var(--accent);
+    margin-top:14px;
+    letter-spacing:.02em;
+  }
+  .ko-sub{
+    font-family:'Nanum Myeongjo',serif;
+    font-weight:700;
+    font-size:clamp(20px,1.6vw,26px);
+    color:var(--ink);
+    letter-spacing:.18em;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+  }
+  .lead{
+    font-family:'Noto Serif KR',serif;
+    font-weight:300;
+    font-size:clamp(15px,1.1vw,17px);
+    line-height:2;
+    color:var(--ink-soft);
+    max-width:500px;
+    letter-spacing:.02em;
+  }
+  .list{
+    list-style:none;display:flex;flex-direction:column;gap:0;
+    max-width:540px;
+  }
+  .list li{
+    display:grid;
+    grid-template-columns:44px 1fr;
+    gap:20px;
+    padding:18px 0;
+    border-top:1px solid var(--line);
+    font-family:'Noto Serif KR',serif;
+    font-weight:400;
+    font-size:clamp(14px,1vw,16px);
+    line-height:1.7;
+    color:var(--ink);
+  }
+  .list li:last-child{border-bottom:1px solid var(--line)}
+  .list li .n{
+    font-family:'Italiana',serif;
+    font-size:18px;color:var(--accent);
+    letter-spacing:.05em;
+    padding-top:2px;
+  }
+
+  /* ================================================
+     SLIDE 3  —  reverse layout
+     ================================================ */
+  .section.reverse .panel-text{order:2}
+  .section.reverse .panel-img{order:1}
+
+  /* ================================================
+     SLIDE 5 — FINALE
+     ================================================ */
+  .finale{
+    grid-template-columns:1fr;
+    place-items:center;
+    position:relative;
+  }
+  .finale .center{
+    position:relative;
+    width:min(900px,82%);
+    text-align:center;
+    padding:60px 40px;
+    display:flex;flex-direction:column;align-items:center;gap:30px;
+    z-index:2;
+  }
+  .finale .top-rule{width:120px;height:1px;background:var(--line)}
+  .finale .eyebrow-c{
+    font-family:'Inter',sans-serif;font-size:11px;
+    letter-spacing:.55em;text-transform:uppercase;
+    color:var(--accent);
+  }
+  .finale h2{
+    font-family:'Italiana',serif;
+    font-size:clamp(68px,8.5vw,150px);
+    line-height:.95;
+    color:var(--ink);
+    font-weight:400;
+  }
+  .finale h2 em{
+    display:block;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-weight:300;
+    font-size:.28em;
+    color:var(--accent);
+    margin-top:10px;
+    letter-spacing:.04em;
+  }
+  .finale .ko-h{
+    font-family:'Nanum Myeongjo',serif;
+    font-weight:800;
+    font-size:clamp(28px,2.6vw,40px);
+    color:var(--ink);
+    letter-spacing:.45em;
+    text-indent:.45em;
+  }
+  .finale img.mini{
+    height:clamp(150px,18vh,200px);
+    object-fit:contain;
+    filter:grayscale(.18);
+  }
+  .finale .msg{
+    font-family:'Noto Serif KR',serif;
+    font-weight:300;
+    font-size:clamp(15px,1.1vw,17px);
+    line-height:2.1;
+    color:var(--ink-soft);
+    max-width:640px;
+    letter-spacing:.03em;
+  }
+  .finale .sign{
+    font-family:'Italiana',serif;
+    font-size:clamp(22px,2vw,28px);
+    letter-spacing:.3em;
+    color:var(--ink);
+    padding-top:22px;
+    border-top:1px solid var(--line);
+    width:260px;
+  }
+  .finale .ghost{
+    position:absolute;
+    font-family:'Italiana',serif;
+    color:rgba(31,29,26,.04);
+    font-size:clamp(260px,40vw,600px);
+    line-height:.75;
+    pointer-events:none;
+    user-select:none;
+    z-index:1;
+  }
+
+  /* ==== transitions polish ==== */
+  .slide .panel-text > *{opacity:0;transform:translateY(20px);transition:opacity .9s ease,transform 1.1s ease}
+  .slide.active .panel-text > *{opacity:1;transform:translateY(0)}
+  .slide.active .panel-text > *:nth-child(1){transition-delay:.2s}
+  .slide.active .panel-text > *:nth-child(2){transition-delay:.35s}
+  .slide.active .panel-text > *:nth-child(3){transition-delay:.5s}
+  .slide.active .panel-text > *:nth-child(4){transition-delay:.65s}
+  .slide.active .panel-text > *:nth-child(5){transition-delay:.8s}
+
+  .cover .left > *{opacity:0;transform:translateY(20px);transition:opacity .9s ease,transform 1.1s ease}
+  .slide.active.cover .left > *{opacity:1;transform:translateY(0)}
+  .slide.active.cover .left > *:nth-child(1){transition-delay:.2s}
+  .slide.active.cover .left > *:nth-child(2){transition-delay:.4s}
+  .slide.active.cover .left > *:nth-child(3){transition-delay:.55s}
+  .slide.active.cover .left > *:nth-child(4){transition-delay:.7s}
+
+  .finale .center > *{opacity:0;transform:translateY(20px);transition:opacity .9s ease,transform 1.1s ease}
+  .slide.active.finale .center > *{opacity:1;transform:translateY(0)}
+  .slide.active.finale .center > *:nth-child(1){transition-delay:.15s}
+  .slide.active.finale .center > *:nth-child(2){transition-delay:.3s}
+  .slide.active.finale .center > *:nth-child(3){transition-delay:.45s}
+  .slide.active.finale .center > *:nth-child(4){transition-delay:.55s}
+  .slide.active.finale .center > *:nth-child(5){transition-delay:.7s}
+  .slide.active.finale .center > *:nth-child(6){transition-delay:.85s}
+  .slide.active.finale .center > *:nth-child(7){transition-delay:1s}
+
+  @media (max-width:900px){
+    .cover,.section{grid-template-columns:1fr}
+    .cover .left,.section .panel-text{padding:80px 36px}
+    .cover .right,.section .panel-img{min-height:44vh}
+    .chrome-top,.chrome-bottom{padding:16px 22px;font-size:9px}
+  }
+</style>
+</head>
+<body>
+
+<!-- Chrome -->
+<div class="chrome-top">
+  <div class="brand"><span>Moyou</span><span class="divider"></span><span>Eugene</span></div>
+  <div class="meta"><span>Wedding Diary</span><span class="divider"></span><span>Vol. 01</span></div>
+</div>
+<div class="chrome-bottom">
+  <div class="l"><span>A Promise</span><span class="divider"></span><span>To Our Family</span></div>
+  <div class="r"><span id="curNum">01</span><span class="divider"></span><span>05</span></div>
+</div>
+
+<div class="stage" id="stage">
+
+  <!-- ========== 1. COVER ========== -->
+  <section class="slide cover active" data-idx="0">
+    <div class="left">
+      <div class="eyebrow">Our Wedding Diary</div>
+      <h1>The<br/>Promise<em>— a story of two, becoming one</em></h1>
+      <div class="ko-title">모 세 유 진 의&nbsp;&nbsp;결 혼 일 기</div>
+      <div class="foot">
+        <span>Chapter 00 · Prologue</span>
+        <span class="big">2 0 2 6</span>
+      </div>
+    </div>
+    <div class="right">
+      <div class="num">01</div>
+      <img src="couple.png" alt="couple" />
+    </div>
+  </section>
+
+  <!-- ========== 2. 결혼 당일 ========== -->
+  <section class="slide section" data-idx="1">
+    <div class="panel-text">
+      <div class="eyebrow-row"><span class="chapter-n">I</span><span class="rule"></span><span>Chapter One</span></div>
+      <h2 class="section-title">The Wedding Day<em>가장 빛나는 하루, 우리의 시작</em></h2>
+      <div class="ko-sub">우 리 의&nbsp;&nbsp;결 혼 당 일</div>
+      <p class="lead">
+        오랜 기다림 끝에 서로의 손을 맞잡고<br/>
+        평생을 함께하겠다 약속하는 날.<br/>
+        두 집안이 한 가족으로 이어지는 시작점입니다.
+      </p>
+      <ul class="list">
+        <li><span class="n">01</span><span>양가 부모님께 가장 먼저 감사의 인사를 드립니다</span></li>
+        <li><span class="n">02</span><span>소중한 분들 앞에서 평생의 약속을 맹세합니다</span></li>
+        <li><span class="n">03</span><span>기쁨과 감사가 머무는 따뜻한 예식을 준비합니다</span></li>
+      </ul>
+    </div>
+    <div class="panel-img video-panel">
+      <div class="video-badge"><span class="dot-live"></span><span>Highlight Film</span></div>
+      <video id="weddingVideo" src="highlight.mp4" muted playsinline preload="metadata" loop></video>
+      <div class="video-caption">김모세 &amp; 오유진<em>The most radiant day</em></div>
+      <button class="video-control" id="videoToggle" aria-label="play/pause">▶</button>
+    </div>
+  </section>
+
+  <!-- ========== 3. 결혼 이후 ========== -->
+  <section class="slide section reverse" data-idx="2">
+    <div class="panel-text">
+      <div class="eyebrow-row"><span class="chapter-n">II</span><span class="rule"></span><span>Chapter Two</span></div>
+      <h2 class="section-title">After The Vow<em>두 사람의 새로운 리듬이 시작됩니다</em></h2>
+      <div class="ko-sub">결 혼 이 후 의&nbsp;&nbsp;우 리</div>
+      <p class="lead">
+        하나의 집, 하나의 식탁, 하나의 일상.<br/>
+        서로에게 가장 편안한 쉼터가 되어주고<br/>
+        각자의 하루를 단단히 응원하며 살아갑니다.
+      </p>
+      <ul class="list">
+        <li><span class="n">01</span><span>우리만의 따뜻한 보금자리를 정성껏 가꿉니다</span></li>
+        <li><span class="n">02</span><span>양가 부모님을 자주 찾아뵙고 안부를 여쭙니다</span></li>
+        <li><span class="n">03</span><span>건강한 생활과 안정된 재정을 함께 만들어 갑니다</span></li>
+        <li><span class="n">04</span><span>서로의 커리어와 성장을 진심으로 응원합니다</span></li>
+      </ul>
+    </div>
+    <div class="panel-img"><img src="couple.png" alt="couple" /></div>
+  </section>
+
+  <!-- ========== 4. 함께하는 과정 ========== -->
+  <section class="slide section" data-idx="3">
+    <div class="panel-text">
+      <div class="eyebrow-row"><span class="chapter-n">III</span><span class="rule"></span><span>Chapter Three</span></div>
+      <h2 class="section-title">Growing Together<em>매일 조금씩, 서로에게 스며드는 일</em></h2>
+      <div class="ko-sub">함 께 하 는&nbsp;&nbsp;과 정</div>
+      <p class="lead">
+        사랑은 하루의 감정이 아닌 매일의 약속이라 믿습니다.<br/>
+        작은 대화와 배려로 우리의 시간을 단단히 쌓아갈게요.
+      </p>
+      <ul class="list">
+        <li><span class="n">01</span><span>매일의 고마움과 미안함을 솔직하게 표현합니다</span></li>
+        <li><span class="n">02</span><span>힘든 순간엔 함께, 기쁨은 두 배로 나눕니다</span></li>
+        <li><span class="n">03</span><span>여행과 취미로 서로의 세계를 넓혀갑니다</span></li>
+        <li><span class="n">04</span><span>양가 경조사를 내 일처럼 챙기며 진짜 가족이 되어갑니다</span></li>
+      </ul>
+    </div>
+    <div class="panel-img"><img src="couple.png" alt="couple" /></div>
+  </section>
+
+  <!-- ========== 5. 잘 살겠습니다 ========== -->
+  <section class="slide finale" data-idx="4">
+    <div class="ghost">&amp;</div>
+    <div class="center">
+      <div class="top-rule"></div>
+      <div class="eyebrow-c">Our Promise To You</div>
+      <h2>Forever<em>forever &amp; always, together</em></h2>
+      <div class="ko-h">잘&nbsp;&nbsp;살 겠 습 니 다</div>
+      <img class="mini" src="couple.png" alt="couple" />
+      <p class="msg">
+        부모님의 사랑과 믿음 안에서 저희 두 사람은<br/>
+        서로를 아끼고, 서로의 가족을 내 부모처럼 모시며<br/>
+        <b style="color:var(--ink);font-weight:500">건강하게, 따뜻하게, 정직하게</b> 살아가겠습니다.<br/><br/>
+        받은 사랑을 잊지 않고 더 크게 돌려드릴 수 있도록<br/>
+        매일 감사하는 마음으로 걸어가겠습니다.
+      </p>
+      <div class="sign">— Moyou &amp; Eugene —</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Nav -->
+<div class="nav">
+  <button id="prev" aria-label="prev">←</button>
+  <div class="dots" id="dots"></div>
+  <button id="next" aria-label="next">→</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsEl = document.getElementById('dots');
+  const curEl = document.getElementById('curNum');
+  let idx = 0;
+
+  slides.forEach((s,i)=>{
+    const d=document.createElement('div');
+    d.className='dot'+(i===0?' active':'');
+    d.onclick=()=>go(i);
+    dotsEl.appendChild(d);
+  });
+  const dots=document.querySelectorAll('.dot');
+
+  const video = document.getElementById('weddingVideo');
+  const vToggle = document.getElementById('videoToggle');
+
+  const PLAYBACK_RATE = 1.25;
+  if(video){
+    video.playbackRate = PLAYBACK_RATE;
+    video.addEventListener('loadedmetadata', ()=>{ video.playbackRate = PLAYBACK_RATE; });
+    video.addEventListener('play',           ()=>{ video.playbackRate = PLAYBACK_RATE; });
+    video.addEventListener('ratechange',     ()=>{ if(video.playbackRate !== PLAYBACK_RATE) video.playbackRate = PLAYBACK_RATE; });
+  }
+
+  function syncVideo(){
+    if(!video) return;
+    if(idx===1){
+      video.muted = true;
+      video.playbackRate = PLAYBACK_RATE;
+      const p = video.play();
+      if(p && p.catch) p.catch(()=>{});
+      vToggle.textContent = '❚❚';
+    } else {
+      video.pause();
+      vToggle.textContent = '▶';
+    }
+  }
+
+  vToggle?.addEventListener('click', e=>{
+    e.stopPropagation();
+    if(video.paused){ video.play(); video.playbackRate = PLAYBACK_RATE; vToggle.textContent='❚❚'; }
+    else            { video.pause(); vToggle.textContent='▶'; }
+  });
+
+  function go(n){
+    idx=(n+slides.length)%slides.length;
+    slides.forEach((s,i)=>s.classList.toggle('active',i===idx));
+    dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+    curEl.textContent=String(idx+1).padStart(2,'0');
+    syncVideo();
+  }
+
+  syncVideo();
+  document.getElementById('prev').onclick=()=>go(idx-1);
+  document.getElementById('next').onclick=()=>go(idx+1);
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight',' ','PageDown'].includes(e.key)) go(idx+1);
+    if(['ArrowLeft','PageUp'].includes(e.key)) go(idx-1);
+  });
+</script>
+
+</body>
+</html>
