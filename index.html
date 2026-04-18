@@ -209,6 +209,59 @@
   .slide.active .panel-img img{transform:translateY(-4px)}
 
   /* video panel */
+  /* photo grid panel */
+  .section .panel-img.grid-panel{padding:0;background:var(--paper);}
+  .section .panel-img.grid-panel::before{
+    content:"";position:absolute;inset:40px;
+    border:1px solid rgba(31,29,26,.16);
+    z-index:2;pointer-events:none;
+  }
+  .section .panel-img.grid-panel .grid-wrap{
+    position:absolute;
+    inset:56px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    grid-template-rows:repeat(4,1fr);
+    gap:6px;
+    z-index:1;
+  }
+  .section .panel-img.grid-panel .cell{
+    position:relative;
+    overflow:hidden;
+    background:#ddd3c4;
+  }
+  .section .panel-img.grid-panel .cell img{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+    filter:grayscale(.08) contrast(1.02);
+    transition:transform 1.2s cubic-bezier(.2,.8,.2,1), filter .6s ease;
+  }
+  .section .panel-img.grid-panel .cell:hover img{
+    transform:scale(1.08);
+    filter:grayscale(0) contrast(1.05);
+  }
+  .section .panel-img.grid-panel .cell::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, transparent 60%, rgba(31,29,26,.08));
+    pointer-events:none;
+  }
+  /* staggered fade-in */
+  .slide .grid-panel .cell{opacity:0;transform:translateY(10px);transition:opacity .7s ease, transform .9s ease;}
+  .slide.active .grid-panel .cell{opacity:1;transform:translateY(0);}
+  .slide.active .grid-panel .cell:nth-child(1){transition-delay:.25s}
+  .slide.active .grid-panel .cell:nth-child(2){transition-delay:.32s}
+  .slide.active .grid-panel .cell:nth-child(3){transition-delay:.39s}
+  .slide.active .grid-panel .cell:nth-child(4){transition-delay:.46s}
+  .slide.active .grid-panel .cell:nth-child(5){transition-delay:.53s}
+  .slide.active .grid-panel .cell:nth-child(6){transition-delay:.6s}
+  .slide.active .grid-panel .cell:nth-child(7){transition-delay:.67s}
+  .slide.active .grid-panel .cell:nth-child(8){transition-delay:.74s}
+  .slide.active .grid-panel .cell:nth-child(9){transition-delay:.81s}
+  .slide.active .grid-panel .cell:nth-child(10){transition-delay:.88s}
+  .slide.active .grid-panel .cell:nth-child(11){transition-delay:.95s}
+  .slide.active .grid-panel .cell:nth-child(12){transition-delay:1.02s}
+
   .section .panel-img.video-panel{background:#0a0908;padding:0}
   .section .panel-img.video-panel::before{
     content:"";position:absolute;inset:40px;
@@ -545,7 +598,22 @@
         <li><span class="n">04</span><span>서로의 커리어와 성장을 진심으로 응원합니다</span></li>
       </ul>
     </div>
-    <div class="panel-img"><img src="couple.png" alt="couple" /></div>
+    <div class="panel-img grid-panel">
+      <div class="grid-wrap">
+        <div class="cell"><img src="photos/p1.jpg" alt="" loading="lazy"/></div>
+        <div class="cell"><img src="photos/p2.jpg" alt="" loading="lazy"/></div>
+        <div class="cell"><img src="photos/p3.jpg" alt="" loading="lazy"/></div>
+        <div class="cell"><img src="photos/p4.jpg" alt="" loading="lazy"/></div>
+        <div class="cell"><img src="photos/p5.jpg" alt="" loading="lazy"/></div>
+        <div class="cell"><img src="photos/p6.jpg" alt="" loading="lazy"/></div>
+        <div class="cell"><img src="photos/p7.jpg" alt="" loading="lazy"/></div>
+        <div class="cell"><img src="photos/p8.jpg" alt="" loading="lazy"/></div>
+        <div class="cell"><img src="photos/p9.jpg" alt="" loading="lazy"/></div>
+        <div class="cell"><img src="photos/p10.jpg" alt="" loading="lazy"/></div>
+        <div class="cell"><img src="photos/p11.jpg" alt="" loading="lazy"/></div>
+        <div class="cell"><img src="photos/p12.jpg" alt="" loading="lazy"/></div>
+      </div>
+    </div>
   </section>
 
   <!-- ========== 4. 함께하는 과정 ========== -->
